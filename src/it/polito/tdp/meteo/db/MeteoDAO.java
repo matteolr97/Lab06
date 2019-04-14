@@ -13,7 +13,7 @@ import it.polito.tdp.meteo.bean.Rilevamento;
 
 public class MeteoDAO {
 	public List<Citta> getAllCitta(){
-		final String sql = "SELECT DISTINCT Localita FROM situazione";
+		final String sql = "SELECT DISTINCT Localita FROM situazione ORDER BY localita";
 
 		List<Citta> cittaDatabase = new ArrayList<Citta>();
 
@@ -99,7 +99,8 @@ public class MeteoDAO {
 
 	public Double getAvgRilevamentiLocalitaMese(Month mese, Citta localita) {
 
-		final String sql = "SELECT AVG(Umidita) FROM situazione WHERE MONTH(Data)=? && Localita = ? GROUP BY Localita";
+		final String sql = "SELECT AVG(Umidita) FROM situazione "
+				+ "WHERE MONTH(Data)=? && Localita = ? ";
 		double umidita = 0.0;
 		
 
@@ -107,8 +108,9 @@ public class MeteoDAO {
 			Connection conn = DBConnect.getInstance().getConnection();
 			PreparedStatement st = conn.prepareStatement(sql);
 
-			st.setInt(1, mese.getValue());
-			st.setString(2, localita.getNome());
+			st.setString(1, localita.getNome());
+			st.setInt(2, mese.getValue());
+			
 
 			ResultSet rs = st.executeQuery();
 

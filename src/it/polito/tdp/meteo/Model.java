@@ -15,7 +15,6 @@ public class Model {
 	private final static int NUMERO_GIORNI_CITTA_MAX = 6;
 	private final static int NUMERO_GIORNI_TOTALI = 15;
 	MeteoDAO dao = new MeteoDAO();
-	List<Citta> parziale = new LinkedList<Citta>();
 	List<Citta> best = new LinkedList<Citta>();
 	List<Citta> tutteCitta= new LinkedList<Citta>();
 	
@@ -49,8 +48,9 @@ public class Model {
 
 	public List<Citta> trovaSequenza(Month mese) {
 		best = null;
+		List<Citta> parziale = new LinkedList<Citta>();
 
-		for( Citta ctemp:parziale) {
+		for( Citta ctemp:tutteCitta) {
 			ctemp.setRilevamenti(dao.getAllRilevamentiLocalitaMese(mese, ctemp));
 		}
 		cercaSequenza(parziale,0);
@@ -109,7 +109,8 @@ public class Model {
 		if(parziale.get(parziale.size()-1).equals(prova)) //GIORNI SUCCESSIVI AL TERZO IN UNA CITTA
 			return true;
 		
-		if(parziale.get(parziale.size()-1).equals(parziale.get(parziale.size()-2))&&parziale.get(parziale.size()-2).equals(parziale.get(parziale.size()-3)))
+		if(parziale.get(parziale.size()-1).equals(parziale.get(parziale.size()-2))&&
+				parziale.get(parziale.size()-2).equals(parziale.get(parziale.size()-3)))
 		return true;//STO CAMBIANDO LA CITTA DI ANALISI
 		
 		
@@ -131,7 +132,7 @@ public class Model {
 	 *         del costo di cambio città
 	 */
 
-	private Double punteggioSoluzione(List<Citta> soluzioneCandidata) {
+	private Double punteggioSoluzione(List<Citta> parziale) {
 
 		double costo = 0.0;
 
